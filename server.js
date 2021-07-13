@@ -44,7 +44,7 @@ app.post('/api/articles/:name/upvote', async (req, res) => {
         const articleName = req.params.name;
         const articleInfo = await db.collection('articles').findOne({ name: articleName })
         await db.collection('articles').updateOne({ name: articleName }, {$set: {upvotes: articleInfo.upvotes + 1}})
-        const updatedArticleInfo = await db.collection('articles').updateOne({ name: articleName }, {$set: {upvotes: articleInfo.upvotes + 1}})
+        const updatedArticleInfo = await db.collection('articles').findOne({ name: articleName }) //await db.collection('articles').updateOne({ name: articleName }, {$set: {upvotes: articleInfo.upvotes + 1}})
         res.status(200).json(updatedArticleInfo);
     }, res)    
 })
@@ -64,4 +64,5 @@ app.post('/api/articles/:name/add-comment', async (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'))
 })
+
 app.listen(PORT, () => console.log(`Listening in port ${PORT}`))
